@@ -243,6 +243,7 @@ static PyObject* THPStorage_pynew(
       }
     } catch (const std::exception&) {
       TORCH_CHECK(
+          false,
           THPStorageStr "(): tried to construct a storage from a sequence (",
           THPUtils_typename(sequence),
           "), ",
@@ -292,6 +293,7 @@ static PyObject* THPStorage_get(THPStorage* self, PyObject* index) {
     slicelength = PySlice_AdjustIndices(len, &start, &stop, step);
     if (step != 1) {
       TORCH_CHECK(
+          false,
           "Trying to slice with a step of ",
           step,
           ", but only a step of "
@@ -341,6 +343,7 @@ static int THPStorage_set(THPStorage* self, PyObject* index, PyObject* value) {
   THPStorage_assertNotNull(self);
   if (!THPByteUtils_checkReal(value)) {
     TORCH_CHECK(
+        false,
         "can only set storage content with a int types, but got ",
         THPUtils_typename(value),
         " instead");
@@ -362,6 +365,7 @@ static int THPStorage_set(THPStorage* self, PyObject* index, PyObject* value) {
     PySlice_AdjustIndices(len, &start, &stop, step);
     if (step != 1) {
       TORCH_CHECK(
+          false,
           "Trying to slice with a step of ",
           step,
           ", but only a step of "
@@ -375,7 +379,7 @@ static int THPStorage_set(THPStorage* self, PyObject* index, PyObject* value) {
     return 0;
   }
   TORCH_CHECK(
-      "can't index a " THPStorageStr " with ", THPUtils_typename(index));
+      false, "can't index a " THPStorageStr " with ", THPUtils_typename(index));
   return -1;
   END_HANDLE_TH_ERRORS_RET(-1)
 }
