@@ -350,7 +350,6 @@ def _optimization_hint_base(
 
         fallback = unbacked_symint_fallback
 
-    original = expr
     # sympy.expand() doesn't work with boolean expressions like Or/And
     if isinstance(expr, sympy.Expr):
         expr = sympy.expand(expr).xreplace(shape_env.replacements)
@@ -395,11 +394,11 @@ def _optimization_hint_base(
         # Make sure to substitute with the factored version
         # e.g. 10*(s0 + u0) instead of 10*s0 + 10*u0
         if (
-            isinstance(original, sympy.Expr)
-            and len(original.free_symbols) <= SYMPY_FACTOR_MAX_FREE_SYMBOLS
+            isinstance(expr, sympy.Expr)
+            and len(expr.free_symbols) <= SYMPY_FACTOR_MAX_FREE_SYMBOLS
         ):
-            original = sympy.factor(original)
-        expr = _sub_unbacked_exprs(shape_env, original)
+            expr = sympy.factor(expr)
+        expr = _sub_unbacked_exprs(shape_env, expr)
 
     # For multiple expressions that depend on an unbacked symint,
     # we want to compute them consistently for a size hint we have chosen.
